@@ -24,7 +24,9 @@ RUN npm install
 
 # Set up environment
 WORKDIR /app
-ENV PORT=8080
+
+# Note: We don't set PORT here as it's provided by Cloud Run
+# ENV PORT=8080
 ENV ROOT_URL=http://localhost:8080
 ENV MONGO_URL=mongodb+srv://placeholder
 

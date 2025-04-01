@@ -6,14 +6,18 @@ const fs = require("fs");
 // Get configuration from Pulumi config
 const config = new pulumi.Config();
 const mongodbUri = config.requireSecret("mongodb_uri");
-const gcpProject = config.require("gcp_project");
-const gcpRegion = config.require("gcp_region");
+
+// Get GCP configuration
+const gcpConfig = new pulumi.Config("gcp");
+const gcpProject = gcpConfig.require("project");
+const gcpRegion = gcpConfig.require("region");
 
 // Create a GCP Artifact Registry repository
 const repo = new gcp.artifactregistry.Repository("meteor-app-repo", {
     format: "DOCKER",
     location: gcpRegion,
     repositoryId: "meteor-app-repo",
+    project: gcpProject,
 });
 
 // Build and push the Docker image
@@ -40,6 +44,7 @@ const serviceUrlPattern = pulumi.interpolate`meteor-app-${gcpProject}.${gcpRegio
 // Deploy the image to Cloud Run
 const service = new gcp.cloudrun.Service("meteor-app-service", {
     location: gcpRegion,
+    project: gcpProject,
     template: {
         spec: {
             containers: [{
@@ -51,10 +56,7 @@ const service = new gcp.cloudrun.Service("meteor-app-service", {
                     },
                 },
                 envs: [
-                    {
-                        name: "PORT",
-                        value: "8080",
-                    },
+                    // Remove the PORT environment variable as it's set automatically
                     {
                         name: "ROOT_URL",
                         value: pulumi.interpolate`https://${serviceUrlPattern}`,
@@ -74,6 +76,7 @@ const service = new gcp.cloudrun.Service("meteor-app-service", {
 const iamMember = new gcp.cloudrun.IamMember("meteor-app-everyone", {
     service: service.name,
     location: gcpRegion,
+    project: gcpProject,
     role: "roles/run.invoker",
     member: "allUsers",
 });

@@ -3,3 +3,6 @@ config:
     secure: AAABAO8tNanFjYVoN0IP/LJ3wfiEoPFH5kkz44t4hyyHigSjvDupQOa+v433009WwpWvpseli8x68lc2Yed6nCARD4CPzDSZY3QF77rVJ8IKqcgQ+cPEnZpTn7g9H2Du1zNRK6vagO/1YiknkVpXpkgh2oP0XkagjXiaxIqLvyawVVSKo54vDTZUH7/B
   meteor-pulumi:gcp_project: meteor-pulumi-demo
   meteor-pulumi:gcp_region: us-central1
+  gcp:project: meteor-pulumi-demo
+  gcp:region: us-central1
+  gcp:zone: us-central1-a
