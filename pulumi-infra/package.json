@@ -2,6 +2,9 @@
     "name": "meteor-pulumi",
     "main": "index.js",
     "dependencies": {
+        "@pulumi/docker": "^4.6.2",
+        "@pulumi/esc-sdk": "^0.12.1",
+        "@pulumi/gcp": "^8.24.0",
         "@pulumi/pulumi": "^3.0.0"
     }
 }
